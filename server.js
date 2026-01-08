@@ -14,7 +14,8 @@ app.post("/api/rfi", (req, res) => {
   const payload = req.body || {};
   res.json({
     ok: true,
-    message: "Placeholder response: RFI received",
+    message:const response = await openai.chat.completions.create({ ... });
+res.send({ message: response.choices[0].message.content });
     received: payload,
     rfi_id: `RFI-${Date.now()}`
   });
