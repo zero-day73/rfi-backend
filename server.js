@@ -14,7 +14,20 @@ app.post("/api/rfi", (req, res) => {
   const payload = req.body || {};
   res.json({
     ok: true,
-    message:const response = await openai.chat.completions.create({ ... });
+    const response = await openai.responses.create({
+  model: "gpt-4.1-mini",
+  input: prompt,
+  text: {
+    format: { type: "json_object" }
+  }
+});
+
+const rfiData = JSON.parse(response.output_text);
+
+res.json({
+  ok: true,
+  rfi: rfiData
+});
 res.send({ message: response.choices[0].message.content });
     received: payload,
     rfi_id: `RFI-${Date.now()}`
