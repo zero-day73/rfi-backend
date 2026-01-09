@@ -18,29 +18,45 @@ app.get("/health", (req, res) => {
 });
 
 // ✅ RFI endpoint
-app.post("/api/rfi", async (req, res) => {
+app.postapp.post("/api/rfi", async (req, res) => {
+  const payload = req.body || {};
+  const userInput = payload.input;
+
+  if (!userInput) {
+    return res.status(400).json({ ok: false, error: "Missing input" });
+  }
+
   try {
-    const payload = req.body || {};
-    const userInput = payload.input;
-
-    if (!userInput) {
-      return res.status(400).json({ ok: false, error: "Missing input" });
-    }
-
     const response = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
         {
           role: "system",
-          content:
-            "You are a helpful assistant that generates formal RFIs (Request for Information) for construction projects.",
+          content: "You are a construction assistant that writes formal, clear RFIs (Request for Information) based on user input."
         },
         {
           role: "user",
-          content: `Create an RFI for the following input:\n${userInput}`,
-        },
-      ],
+          content: `Create an RFI for this: ${userInput}`
+        }
+      ]
     });
+
+    const rfiText = response.choices[0].message.content;
+
+    res.json({
+      ok: true,
+      rfi: rfiText,
+      rfi_id: `RFI-${Date.now()}`,
+      received: payload
+    });
+  } catch (error) {
+    console.error("OpenAI error:", error);
+    res.status(500).json({
+      ok: false,
+      error: "Failed to generate RFI from OpenAI"
+    });
+  }
+});;
 
     const rfiText = response.choices[0].message.content;
 
