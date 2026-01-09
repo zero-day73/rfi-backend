@@ -14,12 +14,18 @@ app.post("/api/rfi", (req, res) => {
   const payload = req.body || {};
   res.json({
     ok: true,
-    const response = await openai.responses.create({
-  model: "gpt-4.1-mini",
-  input: prompt,
-  text: {
-    format: { type: "json_object" }
-  }
+const response = await openai.chat.completions.create({
+  model: "gpt-3.5-turbo",
+  messages: [
+    {
+      role: "system",
+      content: "You are a helpful assistant that generates formal RFIs (Request for Information) for construction projects based on user input."
+    },
+    {
+      role: "user",
+      content: `Create an RFI for the following input: ${userInput}`
+    }
+  ]
 });
 
 const rfiData = JSON.parse(response.output_text);
