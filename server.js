@@ -31,7 +31,8 @@ Generate a formal Request for Information (RFI) based on the following input:
 ${userInput}`
 });
 
-const rfiText = response.output_text;
+const rfiText =
+  response.output?.[0]?.content?.[0]?.text || "No RFI text generated.";
 
     res.json({
       ok: true,
