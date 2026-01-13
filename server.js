@@ -30,7 +30,7 @@ ${userInput}`
       error: "AI service is currently unavailable."
     });
   }
-
+}); //
 
 
 
